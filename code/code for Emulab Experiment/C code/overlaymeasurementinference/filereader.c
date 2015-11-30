@@ -28,25 +28,13 @@ char *trim(char *s) {
 };
 
 int get_node_index_from_char(char * to_parsing_char){
-	//printf("to_parsing_char: %s, len:%d\n", to_parsing_char,strlen(to_parsing_char));
-	//char str_tmp[100];
-	//printf("here1\n");
-	//int to_parsing_char_len = strlen(to_parsing_char);
-	//printf("here3\n");
-	//printf("to_parsing_char: %s\n", to_parsing_char);
-	//printf("to_parsing_char_len: %d\n", strlen(to_parsing_char));
-	//printf("to_parsing_char: %s, to parsing len:%d\n", to_parsing_char+4, strlen(to_parsing_char) -4);
-	//strncpy ( str_tmp, to_parsing_char+4, to_parsing_char_len-4);
-	//printf("here3\n");
-	//printf("str_tmp: %s, len:%d\n", str_tmp,strlen(str_tmp));
-	//return atoi(str_tmp);
+	
 	return atoi(to_parsing_char+4);
 };
 
 
 void read_failure_table_config_file(const char * filename, MBdynarray *underlaylinkarray){
-	//int overlay_index = 0;
-	//int underlay_index = 0;
+	
 	char line[MAXLINE];
 	const char * split = " ";
 	FILE * fp = NULL;
@@ -57,17 +45,16 @@ void read_failure_table_config_file(const char * filename, MBdynarray *underlayl
 		fprintf(stderr, "Can't open %s.\n", filename);
 		exit(1);
 	}
-	//printf("read!\n");
-	//Overlaylink * temp_overlaylink_item = default_overlaylink();
+	
 	char * start_p;
 	char * end_p;
 	char * failure_prob_p;
 	int start_index;
 	int end_index;
-	//int same_omit = 0;
+	
 
 	int same_failure_prob = 0;
-	//printf("start!\n");
+	
 	while (fgets(line, MAXLINE, fp) != NULL){
 		if (line_index == 0){
 			char * first_line_str = trim(line);
@@ -78,7 +65,7 @@ void read_failure_table_config_file(const char * filename, MBdynarray *underlayl
 			}else if (strcmp(first_line_str, "same") == 0){
 				same_failure_prob = 1;
 			}
-			printf("1111\n");
+			
 		}else{
 			if (same_failure_prob == 1){
 				double failure_prob = atof(trim(line));
@@ -128,51 +115,35 @@ void read_routing_config_file(const char * filename, MBdynarray *overlaylinkarra
 		fprintf(stderr, "Can't open %s.\n", filename);
 		exit(1);
 	}
-	//printf("read!\n");
+	
 	Overlaylink * temp_overlaylink_item = default_overlaylink();
 	char * start_p;
 	char * end_p;
 	int start_index;
 	int end_index;
 	int same_omit = 0;
-	//printf("start!\n");
+	
 	while (fgets(line, MAXLINE, fp) != NULL){
-		//printf("line %s", line);
-		//printf("read file!\n");
+		
 		if (line_index%2 == 0){
-			//char * p;
-			//printf("here32\n");
-			//print_overlay_link(temp_overlaylink_item);
 			start_p = trim(strtok(line, split));
 			end_p = trim(strtok(NULL, split));
 			if (strcmp(start_p, end_p) == 0){
-				//printf("omit\n");
 				same_omit = 1;
 			}else{
-				//printf("end_p: %s, len:%d\n", end_p,strlen(end_p));
-				//printf("not omit\n");
 				same_omit = 0;
-				//printf("here\n");
+				
 				start_index = get_node_index_from_char(start_p);
 				end_index = get_node_index_from_char(end_p);
-				//printf("here4\n");
-				//printf("src_index: %d, end_index: %d\n",start_index, end_index);
-				//printf("here1.....\n");
 				temp_overlaylink_item = init_overlaylink(start_index, end_index, overlay_index);
 				//print_overlay_link(temp_overlaylink_item);
 				MBdynarray_add_tail(overlaylinkarray, temp_overlaylink_item);
-				//printf("here2.....\n");
-				//print_overlay_link(temp_overlaylink_item);
-				//print_overlay_link_array(overlaylinkarray);
 				overlay_index = overlay_index + 1;
-				//printf("here\n");
 			}
 			line_index = line_index + 1;
 		}else{
-			//printf("here33\n");
 			//print_overlay_link(temp_overlaylink_item);
 			if (same_omit == 0){
-				//printf("here\n");
 				int pre_index;
 				char * temp_p;
 				temp_p = trim(strtok(line, split));
@@ -184,35 +155,34 @@ void read_routing_config_file(const char * filename, MBdynarray *overlaylinkarra
 					if ((temp_p == NULL) || (strlen(temp_p) == 0)){
 						break;
 					}
-					//printf("come\n");
+					
 					int temp_index = get_node_index_from_char(temp_p);
 					//printf("pre_index: %d, temp_index: %d\n",pre_index, temp_index);
 					int found_underlay = check_underlayarray_included(underlaylinkarray, pre_index, temp_index);
 					//printf("found_underlay: %d\n",found_underlay);
 					if (found_underlay == -1){
-						//printf("here1\n");
+						
 						//Underlaylink * new_underlaylink_item = init_underlaylink(pre_index, temp_index, underlay_index, failure_prob);
 						Underlaylink * new_underlaylink_item = init_underlaylink(pre_index, temp_index, underlay_index);
 						//print_underlay_link(new_underlaylink_item);
 						underlay_index = underlay_index + 1;
-						//printf("here3\n");
+						
 						//print_overlay_link(temp_overlaylink_item);
 						MBdynarray_add_tail(temp_overlaylink_item->underlaylinkarray, new_underlaylink_item);
 						MBdynarray_add_tail(underlaylinkarray, new_underlaylink_item);
-						//printf("here5\n");
+						
 					}else{
 						Underlaylink* underlaylinkitem = (Underlaylink*) MBdynarray_get(underlaylinkarray, found_underlay);
 						MBdynarray_add_tail(temp_overlaylink_item->underlaylinkarray, underlaylinkitem);
 					}
 					pre_index = temp_index;
-					//printf("here4\n");
+					
 					//print_overlay_link_array(overlaylinkarray);
-					//printf("here45\n");
-					//printf("here47\n");
+					
 					//MBdynarray_add_tail(underlaylinkarray, new_underlaylink_item);
 					//underlay_index = underlay_index + 1;
 				}
-				//printf("here46\n");
+				
 				temp_overlaylink_item->cost = (double) MBdynarray_get_count(temp_overlaylink_item->underlaylinkarray);
 				//print_overlay_link_array(overlaylinkarray);
 			}
@@ -278,34 +248,34 @@ void read_ping_result_file(char* directory_name, char * filename, int *min_start
 	char * file_node_p = trim(strtok(filename, filename_split));
 	int src_node_index = get_node_index_from_char(file_node_p);
 	//printf("src_node_index: %d\n", src_node_index);
-	//printf("here3\n");
+	
 	char * value_split = "\r\n\t ";
 	char * node_val_split = "-";
 	FILE * fp = NULL;
 	//int line_index = 0;
-	//printf("here5\n");
+	
 	//printf("filename: %s\n", filename);
 	//printf("directory_name_copy: %s\n", directory_name_copy);
 	//printf("len: %d\n",strlen(directory_name_copy));
 	//fp = fopen(directory_name_copy, "r");
-	//printf("here3\n");
+	
 	if ((fp = fopen(directory_name_copy, "r")) == NULL ){
 		printf("can't open!\n");
 		fprintf(stderr, "Can't open %s.\n", filename);
 		exit(1);
 	}
-	//printf("here4\n");
+	
 	int min_start_index = -1;
 	int max_start_index = -1;
 	int min_end_index = -1;
 	int max_end_index = -1;
 
 	int line_index = 1;
-	//printf("here2\n");
+	
 	while (fgets(line, MAXLINE, fp) != NULL){
 		//printf("line: %s", line);
 		//printf("line_index: %d, strlen(line):%d \n", line_index, strlen(line));
-		//printf("here99\n");
+		
 		char * dst_index_p;
 		char * dst_index_val_p;
 		char * rtt_val_p;
@@ -315,7 +285,7 @@ void read_ping_result_file(char* directory_name, char * filename, int *min_start
 			iperf_position = strstr(line, iperf);
 			//printf("iperf_position: %s\n", iperf_position);
 			if (iperf_position == NULL){
-				//printf("hereh !\n");
+				
 				int dst_node_index;
 				double ping_rtt;
 				//char * start_p;
@@ -551,7 +521,6 @@ void parsing_ping_result(int *min_start, int *max_start, int *min_end, int *max_
 			}
 		}
 	}
-	//printf("here1!\n");
 	MBdynarray *removed_overlaymeasurement_array = MBdynarray_create(0);
 	for (i = 0; i < MBdynarray_get_count(allnodes_overlaymeasurement_array); i++) {
 		SingleNodeOverlayMeasurement *singlenode_overlayMeasurement = (SingleNodeOverlayMeasurement *) MBdynarray_get(allnodes_overlaymeasurement_array, i);
@@ -588,7 +557,6 @@ void parsing_ping_result(int *min_start, int *max_start, int *min_end, int *max_
 	for(i = MBdynarray_get_count(removed_overlaymeasurement_array)-1; i >=0; i--){
 		MBdynarray_remove(allnodes_overlaymeasurement_array, i);
 	}
-	//printf("here2!\n");
 	for (i = 0; i < MBdynarray_get_count(allnodes_overlaymeasurement_array); i++) {
 		SingleNodeOverlayMeasurement *singlenode_overlayMeasurement = (SingleNodeOverlayMeasurement *) MBdynarray_get(allnodes_overlaymeasurement_array, i);
 		//bubbleSort(singlenode_overlayMeasurement->regular_rtt_array);
@@ -639,14 +607,13 @@ void parsing_ping_result(int *min_start, int *max_start, int *min_end, int *max_
 
 void print_delay_array(MBdynarray *arr){
 	int j;
-	//printf("Start to print delay array ...\n");
 	for (j = 0; j < MBdynarray_get_count(arr); j++) {
 		double* underlaylinkitem = (double*) MBdynarray_get(arr, j);
 		printf("%e ", *underlaylinkitem);
 	    	//print_underlay_link(underlaylinkitem);
 	}
 	printf("\n");
-	//printf("End to print delay array ...\n");
+	
 };
 
 

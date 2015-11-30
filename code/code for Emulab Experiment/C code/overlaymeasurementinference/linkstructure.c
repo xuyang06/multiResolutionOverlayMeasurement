@@ -899,7 +899,6 @@ void greedy_infer_underlay(MBdynarray *selectedoverlaylinkarray, MBdynarray *und
 				selected_underlay_index = considered_underlay_index;
 			}
 		}
-		//printf("333\n");
 		if (selected_underlay_score <= 0.0001){
 			//printf("Begin to score 0\n");
 			for (j = 0; j < MBdynarray_get_count(potential_underlay_index); j++){
@@ -951,7 +950,6 @@ void greedy_infer_underlay(MBdynarray *selectedoverlaylinkarray, MBdynarray *und
 			printf("End to print potential_underlay_index array ...\n");*/
 		}
 	}
-	//printf("here2222222222!!!!!\n");
 };
 
 
@@ -1138,40 +1136,6 @@ void bayesian_infer_underlay_cal(MBdynarray *selectedoverlaylinkarray, MBdynarra
 		}
 	}
 	potential_underlay_index = get_complement_set_without_two(considered_underlay_index, uncovered_underlay_array, MBdynarray_get_count(underlaylinkarray));
-	//potential_underlay_index =  get_complement_set(considered_underlay_index, MBdynarray_get_count(underlaylinkarray));
-
-	/*int j;
-	printf("Start to print potential_underlay_index array ...\n");
-	for (j = 0; j < MBdynarray_get_count(potential_underlay_index); j++) {
-		printf("%d ",  (int) MBdynarray_get(potential_underlay_index, j));
-	}
-	printf("\n");
-	printf("End to print potential_underlay_index array ...\n");
-
-
-	//int j;
-	printf("Start to print underlay considered link array ...\n");
-	for (j = 0; j < MBdynarray_get_count(considered_underlay_index); j++) {
-		printf("%d ",  (int) MBdynarray_get(considered_underlay_index, j));
-	}
-	printf("\n");
-	printf("End to print underlay considered link array ...\n");
-
-	printf("Start to print abnormal overlay link array ...\n");
-	for (j = 0; j < MBdynarray_get_count(abnormal_overlay_index); j++) {
-		printf("%d ",  (int) MBdynarray_get(abnormal_overlay_index, j));
-	}
-	printf("\n");
-	printf("End to print abnormal overlay link array ...\n");
-
-
-
-	printf("333!\n");
-*/
-
-	//int comb_matrix[comb_len][MBdynarray_get_count(potential_underlay_index)];
-	//double comb_prob_matrix[comb_len];
-	//int comb_feasible_matrix[comb_len];
 
 
 	double underlay_bayesian_prob_ue0_sum[MBdynarray_get_count(potential_underlay_index)];
@@ -1312,72 +1276,6 @@ void bayesian_infer_underlay_cal(MBdynarray *selectedoverlaylinkarray, MBdynarra
 			}
 		}
 	}
-	//printf("55555555\n");
-/*
-	printf("Start to print underlay_bayesian_prob_ue0_sum array ...\n");
-	int k;
-	for (k = 0; k < MBdynarray_get_count(potential_underlay_index); k++) {
-		printf("%e ",  underlay_bayesian_prob_ue0_sum[k]);
-	}
-	printf("\n");
-	printf("prob_ue0_sum->%e.", prob_ue0_sum);
-	printf("End to print underlay_bayesian_prob_ue0_sum array ...\n");
-*/
-	//printf("222!\n");
-
-/*
-		{
-					comb_feasible_matrix[comb_index] = 0;
-				}else{
-					comb_feasible_matrix[comb_index] = 1;
-				}
-
-
-
-
-
-		comb_prob_matrix[comb_index] = underlay_prob;
-	}
-	//int comb_index = 0;
-	for (comb_index = 0; comb_index < comb_len; comb_index++) {
-		int found_underlay_error = 0;
-		int abnormal_overlay_i = 0;
-		for(; abnormal_overlay_i < MBdynarray_get_count(abnormal_overlay_index); abnormal_overlay_i ++){
-			int found_overlay = 0;
-			int found_overlay_error = 1;
-			Overlaylink *abnormal_overlaylinkitem = (Overlaylink*)MBdynarray_get(selectedoverlaylinkarray, (int)MBdynarray_get(abnormal_overlay_index, abnormal_overlay_i));
-			MBdynarray *ab_underlaylinkarray = abnormal_overlaylinkitem->underlaylinkarray;
-			int j;
-			for (j = 0; j < MBdynarray_get_count(ab_underlaylinkarray); j++) {
-				Underlaylink *underlaylinkitem = (Underlaylink*)MBdynarray_get(ab_underlaylinkarray, j);
-				int found_underlay_i = check_array_included(potential_underlay_index, underlaylinkitem->index);
-				if ( found_underlay_i != -1){
-					found_overlay = 1;
-					if(comb_matrix[abnormal_overlay_i][found_underlay_i] == 0){
-						found_overlay_error = 0;
-						break;
-					}
-				}
-			}
-			if ((found_overlay == 1) && (found_overlay_error == 1)){
-				found_underlay_error = 1;
-				break;
-			}
-		}
-		if (found_underlay_error == 1){
-			comb_feasible_matrix[comb_index] = 0;
-		}else{
-			comb_feasible_matrix[comb_index] = 1;
-		}
-	}
-	double P_sum = 0.0;
-	//int comb_index = 0;
-	for (comb_index = 0; comb_index < comb_len; comb_index++) {
-		if (comb_feasible_matrix[comb_index] == 1){
-			P_sum = P_sum + comb_prob_matrix[comb_index];
-		}
-	}*/
-	//printf("come here!");
 	double underlay_bayesian_prob[MBdynarray_get_count(potential_underlay_index)];
 	int underlay_consider_i;
 	for (underlay_consider_i = 0; underlay_consider_i < MBdynarray_get_count(potential_underlay_index); underlay_consider_i++) {
