@@ -1,0 +1,4 @@
+Nodes: 30
+Underlay links: 90
+Underlay Link Failure Prob: 0.1
+Number of Failure Underlay Links: 12
